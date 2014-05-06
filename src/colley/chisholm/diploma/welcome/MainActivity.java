@@ -28,6 +28,8 @@ public class MainActivity extends Activity {
 		intent.putExtra(EXTRA_MESSAGE, message);
 		// Start the activity in the Intent.
 		startActivity(intent);
+		
+		
 	}
 
 	// Subclasses of Activity must override onCreate.

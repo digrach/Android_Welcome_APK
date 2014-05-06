@@ -57,45 +57,45 @@ public class Particle {
 	}
 
 	public boolean update() {
-		double floorx = Math.floor(posx + 0.5);
-		double floory = Math.floor(posy + 0.5);
-
-		if (floorx == targetx && floory == targety){
-			originy = targety;
-			initialSize = size;
-
-			// Reset target
-			targety = returny;
-			travelRate = 0.01;
-			onWayDown = true;
-		}
-
+		
 		posx += calculateXDistance(targetx) * (travelRate);
 		posy += calculateYDistance(targety) * (travelRate + randomEase);
-
-		if (onWayDown == true) {
-
-			double span = targety - originy;
-			double currenty = posy - originy;
-			double ratio = (1.0 / (span  * 1.0)) * currenty;
-
-			size = initialSize * (1.0 - ratio);
-
-			//if (name == "track") {
-//				System.out.println();
-//				System.out.println("initial size: " + initialSize);
-//				System.out.println("originy: " + originy);
-//				System.out.println("span: " + span);
-//				System.out.println("currenty: " + currenty);
-//				System.out.println("ratio: " + ratio);
-//				System.out.println("size: " + size);
-
-			//}
-
-
-		}
+		
+//		double floorx = Math.floor(posx + 0.5);
+//		double floory = Math.floor(posy + 0.5);
+//
+//		// If has reached the target.
+//		if (floorx == targetx && floory == targety){
+//			originy = targety;
+//			initialSize = size;
+//			// Reset target
+//			targety = returny;
+//			travelRate = 0.01;
+//			onWayDown = true;
+//		}
+//
+//		posx += calculateXDistance(targetx) * (travelRate);
+//		posy += calculateYDistance(targety) * (travelRate + randomEase);
+//
+//		if (onWayDown == true) {
+//			double span = targety - originy;
+//			double currenty = posy - originy;
+//			double ratio = (1.0 / (span  * 1.0)) * currenty;
+//			size = initialSize * (1.0 - ratio);
+//		}
 
 		return posy < 100;
+		//if (name == "track") {
+//		System.out.println();
+//		System.out.println("initial size: " + initialSize);
+//		System.out.println("originy: " + originy);
+//		System.out.println("span: " + span);
+//		System.out.println("currenty: " + currenty);
+//		System.out.println("ratio: " + ratio);
+//		System.out.println("size: " + size);
+
+	//}
+
 	}
 
 	public boolean reachedTarget() {
@@ -183,5 +183,52 @@ public class Particle {
 	public boolean isOnWayDown() {
 		return this.onWayDown;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		long temp;
+		temp = Double.doubleToLongBits(posx);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(posy);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(size);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(targetx);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(targety);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Particle other = (Particle) obj;
+		if (Double.doubleToLongBits(posx) != Double
+				.doubleToLongBits(other.posx))
+			return false;
+		if (Double.doubleToLongBits(posy) != Double
+				.doubleToLongBits(other.posy))
+			return false;
+		if (Double.doubleToLongBits(size) != Double
+				.doubleToLongBits(other.size))
+			return false;
+		if (Double.doubleToLongBits(targetx) != Double
+				.doubleToLongBits(other.targetx))
+			return false;
+		if (Double.doubleToLongBits(targety) != Double
+				.doubleToLongBits(other.targety))
+			return false;
+		return true;
+	}
+	
+	
 
 }

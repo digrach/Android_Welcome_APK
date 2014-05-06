@@ -21,17 +21,16 @@ public class MyParticleThread extends Thread {
 	private int countDownTillNextParticle = 5;
 	private  Paint[] colors = null;
 	private List<Particle>[] checkList;
-	private int particleSize = 5;
+	private int particleSize = 10;
 	Canvas canvas = null;  
 	private boolean running = false;  
-	private final int refresh_rate=16;      // How often we update the screen, in ms  
+	private final int refresh_rate=16;        
 
-
+	int maxParticleSize;
 
 	private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);  
 
-
-
+	// Constructor accepts the surface to draw to.
 	public MyParticleThread(SurfaceHolder holder) {  
 		this.holder = holder;  
 	}  
@@ -40,27 +39,20 @@ public class MyParticleThread extends Thread {
 		synchronized (holder){  
 			mCanvasWidth = width;  
 			mCanvasHeight = height;  
-			
 		}  
 	}  
 
 	@Override  
 	public void run() { 
-//		checkList = new List[mCanvasHeight];
 		long previousTime, currentTime;  
 		previousTime = System.currentTimeMillis();
 
 		while(running == true) {
-			// Look if time has past  
-			currentTime=System.currentTimeMillis();  
-			while ((currentTime-previousTime)<refresh_rate){  
-				currentTime=System.currentTimeMillis();  
+			currentTime = System.currentTimeMillis();  
+			while ((currentTime-previousTime) < refresh_rate){  
+				currentTime = System.currentTimeMillis();  
 			}  
 			previousTime=currentTime;  
-			
-			checkList = new List[mCanvasHeight];
-
-			// PAINT  
 			try {  
 				canvas = holder.lockCanvas();  
 				synchronized (holder) {  
@@ -72,22 +64,23 @@ public class MyParticleThread extends Thread {
 					holder.unlockCanvasAndPost(canvas);  
 				}  
 			}  
-			// WAIT  
-//			try {  
-//				Thread.sleep(refresh_rate-5); // Wait some time till I need to display again  
-//			} catch (InterruptedException e) {  
-//				e.printStackTrace();  
-//			}       
+			try {   
+				Thread.sleep(refresh_rate-5);   
+			} catch (InterruptedException e) {  
+				e.printStackTrace();  
+			}  
 
 			if (countDownTillNextParticle == 0) {
 				countDownTillNextParticle = 5 + (int)(Math.random()*15);
-				AddParticle();
+				addParticle();
 			}
 			countDownTillNextParticle --;
 		}
 	}
 
 	private void draw(Canvas canvas)  {  
+		maxParticleSize = particleSize * 6;
+
 		canvas.drawColor(Color.BLACK);  
 		paint.setStyle(Style.FILL_AND_STROKE);
 		for (int i=0;i<particles.size();i++){   
@@ -98,76 +91,78 @@ public class MyParticleThread extends Thread {
 					(float)p.getSize(),  
 					paint);  
 		}  
-		
 		updateParticles();
 	}
-	
+
 	private void updateParticles() {
-		Iterator<Particle> i = particles.iterator();
-		while (i.hasNext()) {
-			Particle p = i.next();
-			if (p.isOnWayDown() && p.getPosy() >= p.getTargety() - 1) {
-				i.remove();
-				System.out.println("Removed " + particles.size());
-			} else {
-				p.update();
-				// Check if the current particle's y does not yet exist as an index of the array
-				// and create a list of Particle at that index, if need be.
-				if (checkList[(int)p.getPosy()] == null) {
-					checkList[(int)p.getPosy()] = new ArrayList<Particle>();
-				}
-				// Add the current particle to the array of lists at the index of y.
-				checkList[(int)p.getPosy()].add(p);
-				checkForColision(p);
+
+		checkList = new List[mCanvasHeight];
+
+		for (int x = 0; x < particles.size(); x++) {
+			particles.get(x).update();
+			if (checkList[(int)particles.get(x).getPosy()] == null) {
+				checkList[(int)particles.get(x).getPosy()] = new ArrayList<Particle>();
+			}
+			checkList[(int)particles.get(x).getPosy()].add(particles.get(x));
+		}
+
+		for (int x = 0; x < particles.size(); x++) {
+			//particles.get(x).update();
+			if (checkForColision1(particles.get(x))) {
+				particles.get(x).setSize(maxParticleSize);
 			}
 		}
+		
 	}
+
 	
-	public boolean checkForColision(Particle p) {
-		// Field to scan is the Particle's current y
-		// minus particleSize and plus particleSize.
-		int startRowIndex = (int) (p.getPosy() - particleSize);
+	public boolean checkForColision2(Particle p) {
+		boolean collision = false;
+
+		// Field to scan is the Particle's current y +/- max size.
+		int startRowIndex = (int) (p.getPosy() - maxParticleSize);
 		if (startRowIndex < 0) {
 			startRowIndex = 0;
 		}
-		int endRowIndex = (int) (p.getPosy() + particleSize);
-		if (endRowIndex > checkList.length - 2) {
-			endRowIndex = checkList.length - 2;
+		int endRowIndex = (int) (p.getPosy() + maxParticleSize);
+		if (endRowIndex > checkList.length - 1) {
+			endRowIndex = checkList.length - 1;
 		}
-
 		for (int x = startRowIndex; x <= endRowIndex; x ++) {
-			// Get current list and check if it's not null.
-			List<Particle> l = checkList[x];
-			if (l != null) {
-				// Loop through each Particle in the list.
-				for (int i = 0; i < l.size(); i++ ) {
-					// Get current Particle in the list.
+			List<Particle> l = checkList[x]; 
+			if (l != null) { 
+				for (int i = 0; i < l.size(); i++ ) { 
 					Particle cp = l.get(i);
-					
-					// If the current Particle in the list is the one 
-					// we are checking against (self), return.
-					if (cp == p) {
-						return false;
-					}
-					// If the current Particle is within the field we are scanning,
-					// we have found a collision, return true.
-					if ((cp.getPosx() + particleSize) >= (p.getPosx()) &&
-							(cp.getPosx()) <= (p.getPosx() + particleSize)) {
-						p.setSize(50);
-						cp.setSize(50);
-						return true;
 
+					if (p != cp) {
+
+						Particle smaller = p;
+						Particle larger = cp;
+
+						if (p.getSize() > cp.getSize()) {
+							larger = p;
+							smaller = cp;
+						} 
+
+						if (smaller.getPosx() + smaller.getSize() >= larger.getPosx()
+								&& smaller.getPosx() <= larger.getPosx() + larger.getSize()
+								&& smaller.getPosy() + smaller.getSize() >= larger.getPosy()
+								&& smaller.getPosy() <= larger.getPosy() + larger.getSize()) {
+						
+						
+							l.get(i).setSize(maxParticleSize);
+							collision = true;
+
+
+						} 
 					}
 				}
-
 			}
-
 		}
-		// Nothing found, return false.
-		return false;
+		return collision;
 	}
 
-	private void AddParticle() {
+	private void addParticle() {
 		Random r = new Random();
 		int randomx = r.nextInt((int) (mCanvasWidth +1));
 		int randomy = r.nextInt((int) (mCanvasHeight +1));
@@ -176,10 +171,6 @@ public class MyParticleThread extends Thread {
 		Particle p = new Particle(randomx, randomy, randomTargetx, randomTargety, particleSize, makeColor(), mCanvasHeight);
 		particles.add(p);
 		System.out.println("*** Num of particles: " + particles.size());
-
-		//		if (particles.size() == 1) {
-		//			particles.get(0).name = "track";
-		//		}
 	}
 
 	private int makeColor() {
@@ -192,6 +183,64 @@ public class MyParticleThread extends Thread {
 
 	public void setRunning(boolean b) {
 		running = b;
+	}
+	
+//	private void updateParticles() {
+	//		Iterator<Particle> i = particles.iterator();
+	//		while (i.hasNext()) {
+	//			Particle p = i.next();
+	//			if (p.isOnWayDown() && p.getPosy() >= p.getTargety() - 1) {
+	//				i.remove();
+	//				System.out.println("Removed " + particles.size());
+	//			} else {
+	//				p.update();
+	//				// Check if the current particle's y does not yet exist as an index of the array
+	//				// and create a list of Particle at that index, if need be.
+	//				if (checkList[(int)p.getPosy()] == null) {
+	//					checkList[(int)p.getPosy()] = new ArrayList<Particle>();
+	//				}
+	//				// Add the current particle to the array of lists at the index of y.
+	//				checkList[(int)p.getPosy()].add(p);
+	//				checkForColision(p);
+	//			}
+	//		}
+	//	}
+	
+	public boolean checkForColision1(Particle p) {
+		boolean collision = false;
+
+		// Field to scan is the Particle's current y +/- max size.
+		int startRowIndex = (int) (p.getPosy() - maxParticleSize);
+		if (startRowIndex < 0) {
+			startRowIndex = 0;
+		}
+		int endRowIndex = (int) (p.getPosy() + maxParticleSize);
+		if (endRowIndex > checkList.length - 1) {
+			endRowIndex = checkList.length - 1;
+		}
+		for (int x = startRowIndex; x <= endRowIndex; x ++) {
+			List<Particle> l = checkList[x]; 
+			if (l != null) { 
+				for (int i = 0; i < l.size(); i++ ) { 
+					Particle cp = l.get(i);
+
+					if (p != cp) {
+
+						int xd = (int) Math.abs(p.getPosx() - cp.getPosx() + cp.getSize());	
+						int yd = (int) Math.abs(p.getPosy() - cp.getPosy() + cp.getSize());					
+
+						int w = (int) (p.getSize() + cp.getSize());
+						int h = (int) (p.getSize() + cp.getSize());
+
+						if (xd<= w && yd <= h) {
+							cp.setSize(maxParticleSize);
+							collision = true;						
+						}
+					}
+				}
+			}
+		}
+		return collision;
 	}
 
 
