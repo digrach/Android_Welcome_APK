@@ -1,5 +1,6 @@
 package colley.chisholm.diploma.welcome;
 
+import colley.chisholm.diploma.welcome.particle.MyParticleThread;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

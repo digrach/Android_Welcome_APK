@@ -79,7 +79,6 @@ public class MainActivity extends Activity {
 	// Inline class for the internal fragment.
 	public static class PlaceholderFragment extends Fragment {
 
-		// Empty constructor.
 		public PlaceholderFragment() {
 		}
 
@@ -88,12 +87,6 @@ public class MainActivity extends Activity {
 				Bundle savedInstanceState) {
 			
 			return new MyCanvas(getActivity());
-			
-//			// Point to the xml layout to use for this fragment.
-//			View rootView = inflater.inflate(R.layout.fragment_main, container,
-//					false);
-//			
-//			return rootView;
 		}
 	}
 
