@@ -1,5 +1,7 @@
 package colley.chisholm.diploma.welcome;
 
+import colley.chisholm.diploma.welcome.settings.AppSettingz;
+import colley.chisholm.diploma.welcome.utility.MenuMaker;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
@@ -12,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class DisplayMessageActivity extends Activity {
+public class UserHomeActivity extends Activity {
 
 	// All subclasses must override onCreate
 	@Override
@@ -44,17 +46,14 @@ public class DisplayMessageActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle presses on the action bar items
-		switch (item.getItemId()) {
-		case R.id.action_search:
-			//openSearch();
-			return true;
-		case R.id.action_settings:
-			//openSettings();
-			return true;
-		default:
-			return super.onOptionsItemSelected(item);
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		Intent i =	MenuMaker.getAct(this, item);
+		if (i != null) {
+			startActivity(i);
 		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	// Inline class for the internal fragment.
@@ -74,10 +73,13 @@ public class DisplayMessageActivity extends Activity {
 			// Get the message from the intent that started the activity.
 			Intent intent = getActivity().getIntent();
 			String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+			
+			String name = (String) ((AppSettingz)this.getActivity().getApplication()).getSettings(colley.chisholm.diploma.welcome.settings.AppSettingz.PREF_KEY_NAMES.USERNAME, "");
 
 			// Find the TextView control in the layout and set it's text.
 			TextView txtName = (TextView) rootView.findViewById(R.id.txtName);
-			txtName.setText(message);
+//			txtName.setText(message);
+			txtName.setText(name);
 
 			return rootView;
 		}

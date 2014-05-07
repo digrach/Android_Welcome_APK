@@ -52,14 +52,23 @@ public class MyCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
+		
 		boolean retry = true;  
-		myThread.setRunning(false);  
+		myParticleThread.setRunning(false);  
 		while (retry) {  
 			try {  
-				myThread.join();  
+				myParticleThread.join();  
 				retry = false;  
 			} catch (InterruptedException e) {}  
 		}  
+//		boolean retry = true;  
+//		myThread.setRunning(false);  
+//		while (retry) {  
+//			try {  
+//				myThread.join();  
+//				retry = false;  
+//			} catch (InterruptedException e) {}  
+//		}  
 
 	}
 

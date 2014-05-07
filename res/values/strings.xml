@@ -10,5 +10,10 @@
     <string name="action_search">Cloud</string>
     <string name="hai_user">Oh HAI</string>
     <string name="welcome_message">DIG DIP 2014</string>
+    <string name="home_activity_name">Home</string>
+    <string name="particles_activity_name">Particles</string>
+    <string name="map_activity_name">Map</string>
+    <string name="title_activity_particle">ParticleActivity</string>
+    <string name="title_activity_map">MapActivity</string>
 
 </resources>
