@@ -1,4 +1,4 @@
-package colley.chisholm.diploma.welcome;
+package colley.chisholm.diploma.welcome.threads;
 
 import java.util.ArrayList;
 

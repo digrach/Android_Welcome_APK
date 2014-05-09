@@ -15,5 +15,15 @@
     <string name="map_activity_name">Map</string>
     <string name="title_activity_particle">ParticleActivity</string>
     <string name="title_activity_map">MapActivity</string>
+    <string name="lbl_currentlatlong">Current lat/long: </string>
+    <string name="lbl_currentaltitude">Current altitude: </string>
+    <string name="lbl_currentbearing">Current bearing: </string>
+    <string name="lbl_currentaccuracy">Current accuracy: </string>
+    <string name="lbl_currentelapsedtime">Elapsed time (nanoseconds) since read: </string>
+    <string name="lbl_currentutctime">Current UTC time (milliseconds since January 1, 1970): </string>
+    <string name="lbl_currentspeed">Current speed (meters/seconds): </string>
+    <string name="lbl_currentdistancetomelbourne">Current distance to Melbourne, VIC, AU (meters): </string>
+        <string name="lbl_distancebetweenmelbournesanfran">Distance between Melbourne, VIC, AU and San Francisco, CA, USA (meters): </string>
+    
 
 </resources>

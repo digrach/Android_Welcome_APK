@@ -1,6 +1,7 @@
-package colley.chisholm.diploma.welcome;
+package colley.chisholm.diploma.welcome.drawingsurface;
 
 import colley.chisholm.diploma.welcome.particle.MyParticleThread;
+import colley.chisholm.diploma.welcome.threads.MyThread;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;

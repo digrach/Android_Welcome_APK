@@ -58,9 +58,10 @@ public class ParticleActivity extends Activity {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_particle,
-					container, false);
-			return rootView;
+//			View rootView = inflater.inflate(R.layout.fragment_particle,
+//					container, false);
+//			return rootView;
+			return new MyCanvas(getActivity());
 		}
 	}
 
