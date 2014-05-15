@@ -1,7 +1,9 @@
-package colley.chisholm.diploma.welcome.particle;
+package colley.chisholm.diploma.welcome.threads;
 
 import java.util.List;
 
+import colley.chisholm.diploma.welcome.particle.Particle;
+import colley.chisholm.diploma.welcome.particle.ParticleManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;

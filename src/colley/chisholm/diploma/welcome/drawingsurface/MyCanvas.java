@@ -1,7 +1,8 @@
 package colley.chisholm.diploma.welcome.drawingsurface;
 
-import colley.chisholm.diploma.welcome.particle.MyParticleThread;
+import colley.chisholm.diploma.welcome.threads.MyParticleThread;
 import colley.chisholm.diploma.welcome.threads.MyThread;
+import colley.chisholm.diploma.welcome.utility.Print;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -16,9 +17,16 @@ public class MyCanvas extends SurfaceView implements SurfaceHolder.Callback {
 	private MyThread myThread;
 	private MyParticleThread myParticleThread;
 	private MyCanvas myCanvas;
+	
+	private String className;
+
 
 	public MyCanvas(Context context) {
 		super(context);
+		
+		className = this.getClass().getSimpleName();
+		Print.print(className, "MyCanvas");
+		
 		holder = getHolder();
 		holder.addCallback(this);
 	}
@@ -26,15 +34,14 @@ public class MyCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
-		// TODO Auto-generated method stub
-
-
+		Print.print(className, "surfaceCreated");
 	}
 
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width,
 			int height) {
-		
+		Print.print(className, "surfaceChanged");
+
 		if (myParticleThread==null){  
 			myParticleThread = new MyParticleThread(holder);  
 			myParticleThread.setRunning(true);  
@@ -53,7 +60,8 @@ public class MyCanvas extends SurfaceView implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		
+		Print.print(className, "surfaceDestroyed");
+
 		boolean retry = true;  
 		myParticleThread.setRunning(false);  
 		while (retry) {  

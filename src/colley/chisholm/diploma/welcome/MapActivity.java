@@ -2,6 +2,7 @@ package colley.chisholm.diploma.welcome;
 
 import colley.chisholm.diploma.welcome.fragments.LocationFragment;
 import colley.chisholm.diploma.welcome.utility.MenuMaker;
+import colley.chisholm.diploma.welcome.utility.Print;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.PendingIntent;
@@ -22,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class MapActivity extends Activity {
+	
+	private String className;
+
 
 	//	static LocationManager lm;
 	//	static TextView txtSats;
@@ -37,6 +41,9 @@ public class MapActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		className = this.getClass().getSimpleName();
+		Print.print(className, "onCreate");
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 
@@ -45,14 +52,24 @@ public class MapActivity extends Activity {
 //			.add(R.id.container, new PlaceholderFragment()).commit();
 //		}
 		
+//		if (savedInstanceState == null) {
+//			getFragmentManager().beginTransaction()
+//			.add(R.id.container, new LocationFragment(this)).commit();
+//		}
+		
+		LocationFragment lf;// = new LocationFragment(this);
+		
 		if (savedInstanceState == null) {
+			lf = new LocationFragment(this);
 			getFragmentManager().beginTransaction()
-			.add(R.id.container, new LocationFragment(this)).commit();
+			.add(R.id.container, lf).commit();
+			//lf.populateLocationData();
 		}
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		Print.print(className, "onCreateOptionsMenu");
 		// Inflate the menu; this adds items to the action bar if it is present.
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.main_activity_actions, menu);
@@ -61,6 +78,8 @@ public class MapActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Print.print(className, "onOptionsItemSelected");
+
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.

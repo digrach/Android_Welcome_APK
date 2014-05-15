@@ -3,6 +3,7 @@ package colley.chisholm.diploma.welcome.fragments;
 import colley.chisholm.diploma.welcome.R;
 import colley.chisholm.diploma.welcome.R.id;
 import colley.chisholm.diploma.welcome.R.layout;
+import colley.chisholm.diploma.welcome.utility.Print;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
@@ -30,7 +31,7 @@ public class LocationFragment extends Fragment implements LocationListener {
 	static TextView txtdistancebetweenmelbournesanfran;
 	static Activity currentActivity;
 
-	static double lat;
+	double lat;
 	static double lon;
 	static double altitude;
 	static double bearing;
@@ -39,13 +40,20 @@ public class LocationFragment extends Fragment implements LocationListener {
 	static long UTCTime;
 	static float speed;
 
+	private String fragmentClassName;
+
 	public LocationFragment(Activity c) {
 		currentActivity = c;
+
+		fragmentClassName = currentActivity.getClass().getSimpleName() + "." + this.getClass().getSimpleName();
+		Print.print(fragmentClassName, "LocationFragment");
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		Print.print(fragmentClassName, "onCreateView");
+
 		View rootView = inflater.inflate(R.layout.fragment_map, container,
 				false);
 
@@ -59,9 +67,13 @@ public class LocationFragment extends Fragment implements LocationListener {
 		txtdistancetomelbourne = (TextView) rootView.findViewById(R.id.txtdistancetomelbourne);
 		txtdistancebetweenmelbournesanfran = (TextView) rootView.findViewById(R.id.txtdistancebetweenmelbournesanfran);
 
-		lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
-				1, this);
+		//		lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
+		//		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+		//				1, this);
+
+		//		lm = (LocationManager) currentActivity.getSystemService(Context.LOCATION_SERVICE);
+		//		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+		//				1, this);
 
 		populateLocationData();
 
@@ -69,42 +81,63 @@ public class LocationFragment extends Fragment implements LocationListener {
 	}
 
 
-	private static void populateLocationData() {
-		lat = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude();
-		lon = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
-		altitude = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getAltitude();
-		bearing = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getBearing();
-		accuracy = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getAccuracy();
-		elapsedTime = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getElapsedRealtimeNanos();
-		UTCTime = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getTime();
-		speed = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getSpeed();
+	public void populateLocationData() {
+		Print.print(fragmentClassName, "populateLocationData");
 
-		Location locMelbourne = new Location(LocationManager.GPS_PROVIDER);
-		locMelbourne.setLatitude(-37.8602828);
-		locMelbourne.setLongitude(145.079616);
-		float distanceToMelbourne = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).distanceTo(locMelbourne);
+		lm = (LocationManager) currentActivity.getSystemService(Context.LOCATION_SERVICE);
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
+				1, this);
 
-		Location locSanFran = new Location(LocationManager.GPS_PROVIDER);
-		locSanFran.setLatitude(37.7577);
-		locSanFran.setLongitude(-122.4376);
-		float distanceBetweenMelbourneSanFran = locMelbourne.distanceTo(locSanFran);
+		//		if (lm == null) {
+		//		Print.print(fragmentClassName, "populateLocationData ... NULL" + lm.toString());
+		//		} else {
+		//			Print.print(fragmentClassName, "populateLocationData ... NOT NULL" + lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude());
+		//
+		//		}
 
+		//		Print.print(fragmentClassName,lm.getProvider(LocationManager.GPS_PROVIDER).getName());
+		//		Print.print(fragmentClassName,lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getProvider());
 
-		txtSats.setText(Double.toString(lat) + " " + Double.toString(lon));		
-		txtaltitude.setText((Double.toString(altitude)));
-		txtbearing.setText((Double.toString(bearing)));
-		txtaccuracy.setText((Double.toString(accuracy)));
-		txtelapsedtime.setText((Double.toString(elapsedTime)));
-		txtutctime.setText((Double.toString(UTCTime)));
-		txtspeed.setText((Float.toString(speed)));
-		txtdistancetomelbourne.setText((Float.toString(distanceToMelbourne)));
-		txtdistancebetweenmelbournesanfran.setText((Float.toString(distanceBetweenMelbourneSanFran)));
+		if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
 
 
+			lat = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude();
+			lon = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLongitude();
+			altitude = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getAltitude();
+			bearing = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getBearing();
+			accuracy = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getAccuracy();
+			elapsedTime = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getElapsedRealtimeNanos();
+			UTCTime = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getTime();
+			speed = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getSpeed();
+
+			Location locMelbourne = new Location(LocationManager.GPS_PROVIDER);
+			locMelbourne.setLatitude(-37.8602828);
+			locMelbourne.setLongitude(145.079616);
+			float distanceToMelbourne = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).distanceTo(locMelbourne);
+
+			Location locSanFran = new Location(LocationManager.GPS_PROVIDER);
+			locSanFran.setLatitude(37.7577);
+			locSanFran.setLongitude(-122.4376);
+			float distanceBetweenMelbourneSanFran = locMelbourne.distanceTo(locSanFran);
+
+
+			txtSats.setText(Double.toString(lat) + " " + Double.toString(lon));		
+			txtaltitude.setText((Double.toString(altitude)));
+			txtbearing.setText((Double.toString(bearing)));
+			txtaccuracy.setText((Double.toString(accuracy)));
+			txtelapsedtime.setText((Double.toString(elapsedTime)));
+			txtutctime.setText((Double.toString(UTCTime)));
+			txtspeed.setText((Float.toString(speed)));
+			txtdistancetomelbourne.setText((Float.toString(distanceToMelbourne)));
+			txtdistancebetweenmelbournesanfran.setText((Float.toString(distanceBetweenMelbourneSanFran)));
+
+		}
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
+		Print.print(fragmentClassName, "onLocationChanged");
+
 		populateLocationData();
 		Toast.makeText(currentActivity, "Your location has changed", Toast.LENGTH_SHORT).show();
 
@@ -116,18 +149,19 @@ public class LocationFragment extends Fragment implements LocationListener {
 	@Override
 	public void onStatusChanged(String provider, int status,
 			Bundle extras) {
+		Print.print(fragmentClassName, "onStatusChanged");
 
 	}
 
 	@Override
 	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
+		Print.print(fragmentClassName, "onProviderEnabled");
 
 	}
 
 	@Override
 	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
+		Print.print(fragmentClassName, "onProviderDisabled");
 
 	}
 
