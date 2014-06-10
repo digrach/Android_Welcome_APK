@@ -23,9 +23,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	private String className;
-	
-	private PlaceholderFragment dataFragment;
-
+	//private PlaceholderFragment dataFragment;
 	public final static String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
 	// Called when the user clicks the Send button
@@ -38,9 +36,8 @@ public class MainActivity extends Activity {
 		String name = editText.getText().toString();
 		
 		if (name.length() > 0) {
-			
+			// Save the username in the settings.
 			((AppSettingz)this.getApplication()).setSettings(colley.chisholm.diploma.welcome.settings.AppSettingz.PREF_KEY_NAMES.USERNAME, name);
-			
 			// Create an Intent, passing along the current context and the
 			// name of the next Activity we want to start.
 			Intent intent = new Intent(this, UserHomeActivity.class);
@@ -51,7 +48,6 @@ public class MainActivity extends Activity {
 		} else {
 			Toast.makeText(this, "Please enter your name", Toast.LENGTH_SHORT).show();
 		}
-
 		
 	}
 
@@ -60,34 +56,35 @@ public class MainActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		className = this.getClass().getSimpleName();
+		
+		// Set log printing to true (for dev).
 		((AppSettingz)getApplication()).setSettings(PREF_KEY_NAMES.PRINTLOG, "true");
 		Print.print(className, "onCreate");
 		
 		// Must call super.onCreate before introducing new logic.
 		super.onCreate(savedInstanceState);
-		// Point to the xml layout to use for this activity.
+		// Point to the xml layout in res/layout to use for this activity.
 		setContentView(R.layout.activity_main);
 		
-		// find the retained fragment on activity restarts
-        FragmentManager fm = getFragmentManager();
-        dataFragment = (PlaceholderFragment) fm.findFragmentByTag("data");
-
-        // create the fragment and data the first time
-        if (dataFragment == null) {
-            // add the fragment
-            dataFragment = new PlaceholderFragment();
-            fm.beginTransaction().add(dataFragment, "data").commit();
-            // load the data from the web
-            dataFragment.doSomething();
-        }
+//		// find the retained fragment on activity restarts
+//        FragmentManager fm = getFragmentManager();
+//        dataFragment = (PlaceholderFragment) fm.findFragmentByTag("data");
+//
+//        // Create the fragment only if it has not already been created.
+//        // This example uses an in-line Fragment class (bottom of code).
+//        if (dataFragment == null) {
+//            // add the fragment
+//            dataFragment = new PlaceholderFragment();
+//            fm.beginTransaction().add(dataFragment, "data").commit();
+//        }
 		
 		
 
-//		// Add internal fragment to fragment manager.
-//		if (savedInstanceState == null) {
-//			getFragmentManager().beginTransaction()
-//			.add(R.id.container, new PlaceholderFragment()).commit();
-//		}
+		// Add internal fragment to fragment manager.
+		if (savedInstanceState == null) {
+			getFragmentManager().beginTransaction()
+			.add(R.id.container, new PlaceholderFragment()).commit();
+		}
 		
 	}
 
@@ -122,6 +119,7 @@ public class MainActivity extends Activity {
 		
 
 		public PlaceholderFragment() {
+			
 		}
 
 		@Override
@@ -132,18 +130,15 @@ public class MainActivity extends Activity {
 			
 			setRetainInstance(true);
 
-			//return new MyCanvas(getActivity());
+			// return new MyCanvas(getActivity());
+			
 			// Point to the xml layout to use for this fragment.
 			View rootView = inflater.inflate(R.layout.fragment_main,
 					container, false);
-			doSomething();
 			
 			return rootView;
 		}
 		
-		public void doSomething() {
-			Print.print(fragmentClassName, "doSomething");
-		}
 	}
 
 }

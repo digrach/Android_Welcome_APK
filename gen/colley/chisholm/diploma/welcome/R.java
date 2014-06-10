@@ -102,6 +102,7 @@ public final class R {
         public static final int lbl_distancebetweenmelbournesanfran=0x7f050016;
         public static final int map_activity_name=0x7f05000b;
         public static final int particles_activity_name=0x7f05000a;
+        public static final int text_waiting=0x7f050017;
         public static final int title_activity_display_message=0x7f050005;
         public static final int title_activity_map=0x7f05000d;
         public static final int title_activity_particle=0x7f05000c;

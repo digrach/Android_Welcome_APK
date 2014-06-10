@@ -44,14 +44,48 @@ public class LocationFragment extends Fragment implements LocationListener {
 
 	public LocationFragment(Activity c) {
 		currentActivity = c;
-
 		fragmentClassName = currentActivity.getClass().getSimpleName() + "." + this.getClass().getSimpleName();
 		Print.print(fragmentClassName, "LocationFragment");
+	}
+
+	//	@Override
+	//	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	//			Bundle savedInstanceState) {
+	//		Print.print(fragmentClassName, "onCreateView");
+	//		
+	//		setRetainInstance(true);
+	//		
+	//		View rootView = inflater.inflate(R.layout.fragment_map, container,
+	//				false);
+	//		
+	//		
+	//
+	//		txtSats = (TextView) rootView.findViewById(R.id.txtStats);
+	//		txtaltitude = (TextView) rootView.findViewById(R.id.txtaltitude);
+	//		txtbearing = (TextView) rootView.findViewById(R.id.txtbearing);
+	//		txtaccuracy = (TextView) rootView.findViewById(R.id.txtaccuracy);
+	//		txtelapsedtime = (TextView) rootView.findViewById(R.id.txtelapsedtime);
+	//		txtutctime = (TextView) rootView.findViewById(R.id.txtutctime);
+	//		txtspeed = (TextView) rootView.findViewById(R.id.txtspeed);
+	//		txtdistancetomelbourne = (TextView) rootView.findViewById(R.id.txtdistancetomelbourne);
+	//		txtdistancebetweenmelbournesanfran = (TextView) rootView.findViewById(R.id.txtdistancebetweenmelbournesanfran);
+	//
+	//
+	//		populateLocationData();
+	//
+	//		return rootView;
+	//	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setRetainInstance(true);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		//super.onCreateView(inflater, container, savedInstanceState);
 		Print.print(fragmentClassName, "onCreateView");
 
 		View rootView = inflater.inflate(R.layout.fragment_map, container,
@@ -67,14 +101,6 @@ public class LocationFragment extends Fragment implements LocationListener {
 		txtdistancetomelbourne = (TextView) rootView.findViewById(R.id.txtdistancetomelbourne);
 		txtdistancebetweenmelbournesanfran = (TextView) rootView.findViewById(R.id.txtdistancebetweenmelbournesanfran);
 
-		//		lm = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
-		//		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
-		//				1, this);
-
-		//		lm = (LocationManager) currentActivity.getSystemService(Context.LOCATION_SERVICE);
-		//		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
-		//				1, this);
-
 		populateLocationData();
 
 		return rootView;
@@ -87,16 +113,6 @@ public class LocationFragment extends Fragment implements LocationListener {
 		lm = (LocationManager) currentActivity.getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000,
 				1, this);
-
-		//		if (lm == null) {
-		//		Print.print(fragmentClassName, "populateLocationData ... NULL" + lm.toString());
-		//		} else {
-		//			Print.print(fragmentClassName, "populateLocationData ... NOT NULL" + lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getLatitude());
-		//
-		//		}
-
-		//		Print.print(fragmentClassName,lm.getProvider(LocationManager.GPS_PROVIDER).getName());
-		//		Print.print(fragmentClassName,lm.getLastKnownLocation(LocationManager.GPS_PROVIDER).getProvider());
 
 		if (lm.getLastKnownLocation(LocationManager.GPS_PROVIDER) != null) {
 

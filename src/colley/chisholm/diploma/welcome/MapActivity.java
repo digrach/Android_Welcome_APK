@@ -4,40 +4,17 @@ import colley.chisholm.diploma.welcome.fragments.LocationFragment;
 import colley.chisholm.diploma.welcome.utility.MenuMaker;
 import colley.chisholm.diploma.welcome.utility.Print;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.PendingIntent;
-import android.content.Context;
+import android.app.FragmentManager;
 import android.content.Intent;
-import android.location.GpsStatus;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 public class MapActivity extends Activity {
 	
-	private String className;
-
-
-	//	static LocationManager lm;
-	//	static TextView txtSats;
-	//	static TextView txtaltitude;
-	//	static TextView txtbearing;
-	//	static TextView txtaccuracy;
-	//	static TextView txtelapsedtime;
-	//	static TextView txtutctime;
-	//	static TextView txtspeed;
-	//	static TextView txtdistancetomelbourne;
-	//	static TextView txtdistancebetweenmelbournesanfran;
-
+	private String className;	
+	LocationFragment extLocationFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +23,18 @@ public class MapActivity extends Activity {
 		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+		
+		// find the retained fragment on activity restarts
+        FragmentManager fm = getFragmentManager();
+        extLocationFragment = (LocationFragment) fm.findFragmentByTag("locfrag");
+
+        // Create the fragment only if it has not already been created.
+        // This example uses an in-line Fragment class (bottom of code).
+        if (extLocationFragment == null) {
+            // add the fragment
+        	extLocationFragment = new LocationFragment(this);
+            fm.beginTransaction().add(extLocationFragment, "locfrag").commit();
+        }
 
 //		if (savedInstanceState == null) {
 //			getFragmentManager().beginTransaction()
@@ -57,14 +46,18 @@ public class MapActivity extends Activity {
 //			.add(R.id.container, new LocationFragment(this)).commit();
 //		}
 		
-		LocationFragment lf;// = new LocationFragment(this);
+		// = new LocationFragment(this);
 		
-		if (savedInstanceState == null) {
-			lf = new LocationFragment(this);
-			getFragmentManager().beginTransaction()
-			.add(R.id.container, lf).commit();
-			//lf.populateLocationData();
-		}
+//		if (savedInstanceState == null) {
+//			extLocationFragment = new LocationFragment(this);
+//			getFragmentManager().beginTransaction()
+//			.add(R.id.container, extLocationFragment).commit();
+//			//lf.populateLocationData();
+//		}
+		
+		
+		
+		
 	}
 
 	@Override
